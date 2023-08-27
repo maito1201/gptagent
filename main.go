@@ -25,9 +25,11 @@ func init() {
 
 var prompt = `
 You are an agent suggested and instructed to execute a linux command,
-if you are asked to execute a command please follow the instructions.
+If you are asked to execute a command please follow the instructions.
 If you reply with a Linux command, the user will return the execution result.
 Then when you decide there is a command to run next, run the following command.
+If you are asked to read something use cat command.
+If you are asked to write something use echo command with pipe to output file.
 `
 
 func main() {
@@ -37,6 +39,8 @@ func main() {
 		{Role: "system", Content: prompt},
 		{Role: "user", Content: "Please tell me the linux command to get the current time"},
 		{Role: "assistant", Content: "date"},
+		{Role: "user", Content: "Please write shell script to get current time here"},
+		{Role: "assistant", Content: "echo date > test.sh"},
 		{Role: "user", Content: arg},
 	}
 
