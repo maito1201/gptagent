@@ -2,7 +2,6 @@ package command
 
 import (
 	"os/exec"
-	"strings"
 )
 
 type Command struct {
@@ -10,11 +9,7 @@ type Command struct {
 }
 
 func (c *Command) RunCommand() string {
-	cmdFields := strings.Fields(c.Command)
-	args := cmdFields[0:]
-	args = append(args, "2>&1")
-
-	cmd := exec.Command("sh", "-c", strings.Join(args, " "))
+	cmd := exec.Command("sh", "-c", c.Command, "2>&1")
 
 	out, _ := cmd.Output()
 	return string(out)
