@@ -2,7 +2,6 @@ package command
 
 import (
 	"bytes"
-	"fmt"
 	"os/exec"
 	"strings"
 )
@@ -11,7 +10,7 @@ type Command struct {
 	Command string `json:"command"`
 }
 
-func (c *Command) RunCommand() {
+func (c *Command) RunCommand() (string, error) {
 	cmdFields := strings.Fields(c.Command)
 	cmd := cmdFields[0]
 	args := cmdFields[1:]
@@ -22,9 +21,8 @@ func (c *Command) RunCommand() {
 
 	err := cmdObj.Run()
 	if err != nil {
-		fmt.Println("Command execution failed:", err)
-		return
+		return "", err
 	}
 
-	fmt.Printf("Command output: \n%s\n", out.String())
+	return out.String(), nil
 }

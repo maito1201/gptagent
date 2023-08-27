@@ -20,7 +20,7 @@ func NewGPT(url string, apiKey string) GPT {
 	}
 }
 
-func (g *GPT) CallCompletionsAPI(rd RequestData) (*ResponseData, error) {
+func (g *GPT) CallCompletionsAPI(rd *RequestData) (*ResponseData, error) {
 	reqBody, err := json.Marshal(rd)
 	if err != nil {
 		return nil, err

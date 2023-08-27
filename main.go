@@ -23,11 +23,18 @@ func init() {
 	g = gpt.NewGPT(url, apiKey)
 }
 
+var prompt = `
+You are an agent suggested and instructed to execute a linux command,
+if you are asked to execute a command please follow the instructions.
+If you reply with a Linux command, the user will return the execution result.
+Then when you decide there is a command to run next, run the following command.
+`
+
 func main() {
 	arg := os.Args[1]
 
 	messages := gpt.Messages{
-		{Role: "system", Content: "You are an agent suggested and instructed to execute a linux command, if you are asked to execute a command please follow the instructions"},
+		{Role: "system", Content: prompt},
 		{Role: "user", Content: "Please tell me the linux command to get the current time"},
 		{Role: "assistant", Content: "date"},
 		{Role: "user", Content: arg},
@@ -60,7 +67,10 @@ func main() {
 		Messages:  messages,
 		Functions: functions,
 	}
+	execute(&reqData)
+}
 
+func execute(reqData *gpt.RequestData) {
 	d, err := g.CallCompletionsAPI(reqData)
 	if err != nil {
 		panic(err)
@@ -76,7 +86,16 @@ func main() {
 					panic(err)
 				}
 				fmt.Printf("running... %s\n", c.Command)
-				c.RunCommand()
+				out, err := c.RunCommand()
+				if err != nil {
+					panic(err)
+				}
+				fmt.Println("Command output:", out)
+				reqData.Messages = append(reqData.Messages, gpt.Messages{
+					{Role: "assistant", Content: c.Command},
+					{Role: "user", Content: out},
+				}...)
+				execute(reqData)
 			} else {
 				fmt.Printf("Error: ChatGPT called unknown function %s\n", d.Choices[0].Message.FunctionCall.Name)
 			}
