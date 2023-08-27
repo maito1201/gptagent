@@ -86,10 +86,7 @@ func execute(reqData *gpt.RequestData) {
 					panic(err)
 				}
 				fmt.Printf("running... %s\n", c.Command)
-				out, err := c.RunCommand()
-				if err != nil {
-					panic(err)
-				}
+				out := c.RunCommand()
 				fmt.Println("Command output:", out)
 				reqData.Messages = append(reqData.Messages, gpt.Messages{
 					{Role: "assistant", Content: c.Command},

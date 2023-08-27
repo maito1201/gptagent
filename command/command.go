@@ -1,7 +1,6 @@
 package command
 
 import (
-	"bytes"
 	"os/exec"
 	"strings"
 )
@@ -10,19 +9,13 @@ type Command struct {
 	Command string `json:"command"`
 }
 
-func (c *Command) RunCommand() (string, error) {
+func (c *Command) RunCommand() string {
 	cmdFields := strings.Fields(c.Command)
-	cmd := cmdFields[0]
-	args := cmdFields[1:]
+	args := cmdFields[0:]
+	args = append(args, "2>&1")
 
-	cmdObj := exec.Command(cmd, args...)
-	var out bytes.Buffer
-	cmdObj.Stdout = &out
+	cmd := exec.Command("sh", "-c", strings.Join(args, " "))
 
-	err := cmdObj.Run()
-	if err != nil {
-		return "", err
-	}
-
-	return out.String(), nil
+	out, _ := cmd.Output()
+	return string(out)
 }
