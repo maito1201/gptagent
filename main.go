@@ -90,7 +90,6 @@ func execute(reqData *gpt.RequestData) {
 				if err := json.Unmarshal([]byte(d.Choices[0].Message.Arguments), &c); err != nil {
 					panic(err)
 				}
-				fmt.Printf("running... %s\n", c.Command)
 				out := c.RunCommand()
 				fmt.Println("Command output:", out)
 				reqData.Messages = append(reqData.Messages, gpt.Messages{
