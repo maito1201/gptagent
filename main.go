@@ -35,7 +35,10 @@ Do not use echo command to write file avoid to unexpected result.
 `
 
 func main() {
-	arg := os.Args[1]
+	arg := "hello"
+	if len(os.Args) > 1 {
+		arg = os.Args[1]
+	}
 	messages := gpt.Messages{
 		{Role: "system", Content: prompt},
 		{Role: "user", Content: "Please tell me the linux command to get the current time"},
