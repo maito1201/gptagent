@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"encoding/json"
 	"fmt"
 	"gptagent/command"
@@ -35,7 +36,6 @@ Do not use echo command to write file avoid to unexpected result.
 
 func main() {
 	arg := os.Args[1]
-
 	messages := gpt.Messages{
 		{Role: "system", Content: prompt},
 		{Role: "user", Content: "Please tell me the linux command to get the current time"},
@@ -83,7 +83,24 @@ func execute(reqData *gpt.RequestData) {
 
 	if len(d.Choices) > 0 {
 		if d.Choices[0].Message.Content != nil {
-			fmt.Println(*d.Choices[0].Message.Content)
+			reader := bufio.NewReader(os.Stdin)
+			ans := *d.Choices[0].Message.Content
+		TOP:
+			fmt.Println(ans)
+			fmt.Print("(input your answer): ")
+			input, _ := reader.ReadString('\n')
+			if input == "\n" {
+				goto TOP
+			} else {
+				reqData.Messages = append(
+					reqData.Messages,
+					gpt.Messages{
+						{Role: "assistant", Content: ans},
+						{Role: "user", Content: input},
+					}...,
+				)
+				execute(reqData)
+			}
 		} else if d.Choices[0].Message.FunctionCall != nil {
 			if d.Choices[0].Message.FunctionCall.Name == "execute_linux_command" {
 				var c command.Command
