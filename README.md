@@ -10,7 +10,7 @@ This is a simple program to execute linux command by asking chatGPT.
 ```sh
 export OPENAI_API_KEY="your_key" # required
 export GPT_MODEL="gpt-4" # default gpt-3.5-turbo
-export OPENAI_API_ENDPOINT="https*//domain_name" # default https://api.openai.com/v1/chat/completions
+export OPENAI_API_ENDPOINT="https://domain_name" # default https://api.openai.com/v1/chat/completions
 ```
 
 ## usage examples
