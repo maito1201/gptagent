@@ -151,3 +151,11 @@ The current weather in Tokyo is as follows:
 
 Please note that weather conditions may change, so it's always good to check the latest updates.
 ```
+
+```
+gptagent "kill task using port 3000"
+suggested command is "lsof -t -i:3000". are you sure to execute? (y/n/any opinion): y
+Command output: 5178
+
+suggested command is "kill -9 5178". are you sure to execute? (y/n/any opinion): y
+```
